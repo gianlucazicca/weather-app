@@ -4,7 +4,14 @@ import weatherCodes from '../../assets/weatherCodes.json';
 const props = defineProps({
     hourWeatherData: {
         type: Object,
-        required: true
+        required: true,
+        default: () => ({
+            time: new Date(),
+            values: {
+                temperature: 0,
+                weatherCode: 0
+            }
+        })
     }
 });
 

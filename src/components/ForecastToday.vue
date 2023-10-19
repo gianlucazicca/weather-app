@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, computed } from 'vue';
 import ForecastHour from './forecastToday/ForecastHour.vue';
-
+import Card from './Card.vue';
 const props = defineProps({
     hourly: {
         type: Array,
@@ -17,19 +17,18 @@ const untilNextDay = computed(() => {
         return itemDate >= now && itemDate < nextDay;
     });
 });
-
+const headerText = "Sunny conditions will countinue for the rest of the day. Wind gusts are up to 36 km/h."
 </script>
 
 <template>
-    <div class="rounded-xl bg-sky-600/50 backdrop-blur w-full">
-        <div class="text-white text-left p-2 text-sm leading-5">
-            Sunny conditions will countinue for the rest of the day. Wind gusts are up to 36 km/h.
-        </div>
-        <div class="px-2">
-            <div class="h-[1px] w-full bg-white/50 rounded-full"></div>
-        </div>
-        <div class="w-full overflow-x-scroll overflow-y-hidden flex">
-            <forecast-hour v-for="item in untilNextDay" :hour-weather-data="item" />
-        </div>
-    </div>
+    <Card>
+        <template #card-header>
+            HOURLY FORECAST
+        </template>
+        <template #card-body>
+            <div class="w-full overflow-x-scroll overflow-y-hidden flex">
+                <forecast-hour v-for="item in untilNextDay" :hour-weather-data="item" />
+            </div>
+        </template>
+    </Card>
 </template>
