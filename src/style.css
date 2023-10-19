@@ -2,12 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  color-scheme: light dark;
+  --vp-width: 390px;
+  --vp-height: 844px;
+  --vp-gutter: 1rem;
+  --radius: 1rem;
+  --offset: 5rem;
+
+  --bg: rgb(14 165 233);
+  --surface: hsl(0 0% 92%);
+  --surface-2: hsl(0 0% 84%);
+  --text: hsl(0 0% 0%);
+  --border: hsl(0 0% 0%);
+}
 * {
   @apply text-base
 }
 
 html {
-   @apply antialiased bg-gradient-to-t from-sky-300 to-sky-500 bg-fixed bg-no-repeat bg-center overflow-x-hidden;
+
+  background-color: var(--bg); 
+   @apply antialiased bg-fixed bg-no-repeat bg-center overflow-x-hidden;
+}
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: calc(var(--vp-gutter) * -2);
+  position: relative;
+  z-index: 0;
+}
+main > *:not(.tile) {
+  grid-column: 1 / -1;
+}
+header{
+  position: relative;
+  margin-block: var(--offset);
+  text-align: center;
+  z-index: 1;
+}
+main::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  height: calc(var(--offset) * 1);
+  z-index: 1;
+  grid-column: 1 / -1;
+  display: block;
+  width: 100%;
+  background: linear-gradient(var(--bg), var(--bg)); 
+}
+
+.card::before {
+  content: "";
+  position: sticky;
+  top:  calc(var(--offset) * 1);
+  height: calc(var(--vp-gutter) * 1.5);
+  z-index: 0;
+  grid-column: 1 / -1;
+  display: block;
+  width: 100%;
+  background-color: var(--bg); 
+}
+
+.card-header {
+  position: sticky;
+  top:  calc(var(--offset) * 1);
+  z-index: 1;
+  font-size: 1rem;
+  font-variant-caps: all-small-caps;
+  padding-block: 0.5rem 0.7rem;
+  margin-top: -10px;
+  background-color: inherit;
+}
+
+.card-body {
+  position: relative;
+  z-index: -1;
 }
 
 body {

@@ -44,21 +44,21 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div id="container" class="w-100 h-screen p-6 pb-56 relative">
-        <section id="location-current-weather">
+    <div id="container" class="w-100 h-screen p-6 pb-56">
+
+        <header id="location-current-weather" class="my-1 z-20">
             <current-weather :locationName="locationName" :currentWeatherData="realtime.data" :dailyWeather="daily" />
-        </section>
-
-        <section>
-            <forecast-today class="mb-4" :hourly="hourly" />
-            <forecast-next-days class="mb-4" :daily="daily" />
-            <air-quality class="mb-4" :airQualityData="realtime.data" />
-        </section>
-        <section>
+        </header>
+        <main class="z-10">
+            <forecast-today :hourly="hourly" />
+            <forecast-next-days :daily="daily" />
+            <air-quality :airQualityData="realtime.data" />
             <detail-section />
-        </section>
+        </main>
 
-        <div class="h-[600px]">
+
+
+        <div class="h-[6008px]">
 
         </div>
     </div>
