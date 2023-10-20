@@ -6,7 +6,7 @@ import ForecastToday from '../components/ForecastToday.vue';
 import CurrentWeather from '../components/CurrentWeather.vue';
 import ForecastNextDays from '../components/ForecastNextDays.vue';
 import AirQuality from '../components/AirQuality.vue';
-import DetailSection from '../components/DetailSection.vue';
+import UVIndex from '../components/UVIndex.vue';
 const realtime = ref(mockRealtimeData);
 const forecast = ref(mockForecastData);
 const cordinates = ref(null);
@@ -35,6 +35,14 @@ const locationName = computed(() => {
 //await getGeolocation();
 const { location, timelines: { daily, hourly, monthly } } = forecast.value;
 
+const today = computed(() => {
+    return daily.find(({ time }) => {
+        const date = new Date(time);
+        const now = new Date();
+        return date.getDate() === now.getDate();
+    })
+});
+
 
 
 onMounted(async () => {
@@ -44,23 +52,18 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div id="container" class="w-100 h-screen p-6 pb-56">
+    <div id="container" class="w-100 p-6 pb-56">
 
-        <header id="location-current-weather" class="my-1 z-20">
+        <header id="location-current-weather" class="mb-16 mt-8 z-20 sticky top-5">
             <current-weather :locationName="locationName" :currentWeatherData="realtime.data" :dailyWeather="daily" />
         </header>
+
         <main class="z-10">
-            <forecast-today :hourly="hourly" />
+            <forecast-today :hourly="hourly" :today="today" />
             <forecast-next-days :daily="daily" />
             <air-quality :airQualityData="realtime.data" />
-            <detail-section />
+            <u-v-index :uvIndexData="realtime.data" />
         </main>
-
-
-
-        <div class="h-[6008px]">
-
-        </div>
     </div>
 </template>
 

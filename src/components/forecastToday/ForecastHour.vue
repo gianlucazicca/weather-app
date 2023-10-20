@@ -44,7 +44,7 @@ const weatherCodeToEmoji = computed(() => {
 <template>
     <div class="text-white pl-2 py-2 pr-5 text-base">
         <div>
-            {{ hour }}
+            {{ hour }} {{ hourWeatherData.isSunset ? 'Sunset' : '' }} {{ hourWeatherData.isSunrise ? 'Sunrise' : '' }}
         </div>
         <div class="text-2xl pt-2 pb-2">
             {{ weatherCodeToEmoji }}

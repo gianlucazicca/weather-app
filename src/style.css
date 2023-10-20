@@ -8,7 +8,7 @@
   --vp-height: 844px;
   --vp-gutter: 1rem;
   --radius: 1rem;
-  --offset: 5rem;
+  --offset: 6rem;
 
   --bg: rgb(14 165 233);
   --surface: hsl(0 0% 92%);
@@ -25,6 +25,9 @@ html {
   background-color: var(--bg); 
    @apply antialiased bg-fixed bg-no-repeat bg-center overflow-x-hidden;
 }
+body {
+  padding-bottom: -20px
+}
 main {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -36,15 +39,9 @@ main {
 main > *:not(.tile) {
   grid-column: 1 / -1;
 }
-header{
-  position: relative;
-  margin-block: var(--offset);
-  text-align: center;
-  z-index: 1;
-}
 main::before {
   content: "";
-  position: sticky;
+  position: fixed;
   top: 0;
   height: calc(var(--offset) * 1);
   z-index: 1;
@@ -53,7 +50,11 @@ main::before {
   width: 100%;
   background: linear-gradient(var(--bg), var(--bg)); 
 }
-
+header{
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
 .card::before {
   content: "";
   position: sticky;
@@ -81,8 +82,7 @@ main::before {
   position: relative;
   z-index: -1;
 }
+.tile {
+  grid-column: 1 / 1;
 
-body {
-  padding-bottom: -20px
 }
-
