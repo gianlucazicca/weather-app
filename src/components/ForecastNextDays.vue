@@ -15,7 +15,7 @@ const props = defineProps({
             10-Day Forecast
         </template>
         <template #card-body>
-            <div class="w-full">
+            <div class="w-full daily-row-container">
                 <forecast-daily v-for="day in props.daily" :day="day" />
             </div>
         </template>
