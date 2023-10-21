@@ -25,16 +25,18 @@ const hour = computed(() => {
     if (hour < 10) {
         hour = '0' + hour;
     }
-    return isNow ? 'Now' : hour;
+    let minutes = new Date(props.hourWeatherData.time).getMinutes();
+    if (minutes < 10) {
+        minutes = '0' + minutes;
+    }
+    if (props.hourWeatherData.isSunset || props.hourWeatherData.isSunrise) return hour + ':' + minutes;
+    else return isNow ? 'Now' : hour;
 });
 
 const temperature = computed(() => {
     return Math.round(props.hourWeatherData.values.temperature) + '°';
 });
 
-const isNow = computed(() => {
-    return
-});
 
 const weatherCodeToEmoji = computed(() => {
     return weatherCodes.weatherCode[weatherCode.value].icon;
@@ -42,15 +44,26 @@ const weatherCodeToEmoji = computed(() => {
 </script>
 
 <template>
-    <div class="text-white pl-2 py-2 pr-5 text-base">
+    <div v-if="!hourWeatherData.isSunset && !hourWeatherData.isSunrise" class="text-white text-base text-center">
         <div>
-            {{ hour }} {{ hourWeatherData.isSunset ? 'Sunset' : '' }} {{ hourWeatherData.isSunrise ? 'Sunrise' : '' }}
+            {{ hour }}
         </div>
-        <div class="text-2xl pt-2 pb-2">
+        <div class="text-2xl py-1">
             {{ weatherCodeToEmoji }}
         </div>
         <div>
             {{ temperature }}
+        </div>
+    </div>
+    <div v-else class="text-white text-base text-center">
+        <div>
+            {{ hour }}
+        </div>
+        <div class="text-2xl py-1">
+            {{ weatherCodeToEmoji }}
+        </div>
+        <div>
+            {{ hourWeatherData.isSunset ? 'Sunset' : 'Sunrise' }}
         </div>
     </div>
 </template>

@@ -43,10 +43,12 @@ const today = computed(() => {
     })
 });
 
-
-
-onMounted(async () => {
-
+const nextDay = computed(() => {
+    return daily.find(({ time }) => {
+        const date = new Date(time);
+        const now = new Date();
+        return date.getDate() === now.getDate() + 1;
+    })
 });
 
 </script>
@@ -59,7 +61,7 @@ onMounted(async () => {
         </header>
 
         <main class="z-10">
-            <forecast-today :hourly="hourly" :today="today" />
+            <forecast-today :hourly="hourly" :today="today" :nextDay="nextDay" />
             <forecast-next-days :daily="daily" />
             <air-quality :airQualityData="realtime.data" />
             <u-v-index :uvIndexData="realtime.data" />

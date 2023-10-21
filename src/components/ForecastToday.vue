@@ -7,34 +7,62 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    sunsetTime: {
-        type: String,
-        required: true
-    },
-    sunriseTime: {
-        type: String,
-        required: true
-    },
     today: {
+        type: Object,
+        required: true
+    },
+    nextDay: {
         type: Object,
         required: true
     }
 });
-const sunsetTime = computed(() => {
+const sunsetTimes = computed(() => {
     return props.today.values.sunsetTime;
 });
 
-const sunriseTime = computed(() => {
-    return props.today.values.sunriseTime;
+const sunriseSunsetTimes = computed(() => {
+
 });
 const untilNextDay = computed(() => {
-    const arr = props.hourly;
-    arr.push({ time: sunsetTime.value, values: { temperature: 0, weatherCode: 0 }, isSunset: true })
-    arr.push({ time: sunriseTime.value, values: { temperature: 0, weatherCode: 0 }, isSunrise: true })
+    const hourlyArr = props.hourly;
+    const sunsetSunriseTimes = [
+        {
+            time: props.today.values.sunriseTime,
+            isSunset: false,
+            isSunrise: true,
+            values: {
+                weatherCode: 9990
+            }
+        },
+        {
+            time: props.today.values.sunsetTime,
+            isSunset: true,
+            isSunrise: false,
+            values: {
+                weatherCode: 9991
+            }
+        },
+        {
+            time: props.nextDay.values.sunriseTime,
+            isSunset: false,
+            isSunrise: true,
+            values: {
+                weatherCode: 9990
+            }
+        },
+        {
+            time: props.nextDay.values.sunsetTime,
+            isSunset: true,
+            isSunrise: false,
+            values: {
+                weatherCode: 9991
+            }
 
+        }
+    ];
+    const arr = [...hourlyArr, ...sunsetSunriseTimes];
 
     let returnArr = arr.filter((item) => {
-
         const now = new Date(new Date().setMinutes(0, 0, 0));
         const itemDate = new Date(item.time);
         const nextDay = new Date(new Date().setDate(new Date().getDate() + 1));
@@ -56,7 +84,7 @@ const headerText = "Sunny conditions will countinue for the rest of the day. Win
             HOURLY FORECAST
         </template>
         <template #card-body>
-            <div class="w-full overflow-x-scroll overflow-y-hidden flex">
+            <div class="w-full overflow-x-scroll overflow-y-hidden flex gap-6 py-2 px-4 snap-x snap-mandatory">
                 <forecast-hour v-for="item in untilNextDay" :hour-weather-data="item" />
             </div>
         </template>

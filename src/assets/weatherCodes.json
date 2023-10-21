@@ -23,7 +23,9 @@
     "7000": { "value": "Ice Pellets", "icon": "🌧" },
     "7101": { "value": "Heavy Ice Pellets", "icon": "🌧" },
     "7102": { "value": "Light Ice Pellets", "icon": "🌧" },
-    "8000": { "value": "Thunderstorm", "icon": "⛈" }
+    "8000": { "value": "Thunderstorm", "icon": "⛈" },
+    "9990": { "value": "Sunrise", "icon": "🌅" },
+    "9991": { "value": "Sunset", "icon": "🌄" }
   },
 
   "weatherCodeFullDay": {
