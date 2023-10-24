@@ -1,5 +1,5 @@
 <script setup>
-import ForecastDaily from './forecastNextDays/ForecastDaily.vue';
+import ForecastDaily from '@c/forecastNextDays/ForecastDaily.vue';
 import Card from './Card.vue';
 const props = defineProps({
     daily: {

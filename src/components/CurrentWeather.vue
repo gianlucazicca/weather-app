@@ -1,6 +1,6 @@
 <script setup>
-import { defineProps, computed, onMounted, onUnmounted, ref } from 'vue';
-import weatherCodes from '../assets/weatherCodes.json'
+import { defineProps, computed, onMounted, onUnmounted, ref, nextTick, onBeforeUpdate } from 'vue';
+import weatherCodes from '@/assets/weatherCodes.json'
 import { gsap } from "gsap";
 
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -42,49 +42,31 @@ const weatherCodeToText = computed(() => {
 
 onMounted(() => {
     gsap.registerPlugin(ScrollTrigger);
-    const heighLowTempAnimation = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#current-weather",
-            start: "-20px 0%",
-            end: "40px 0%",
-            scrub: true,
-            toggleActions: "restart none none reverse"
-        }
-    });
-    const currentWeatherAnimation = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#current-weather",
-            start: "20px 0%",
-            end: "70px 0%",
-            scrub: true,
-            toggleActions: "restart none none reverse"
-        }
+    nextTick().then(() => {
+        const test = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#current-weather",
+                start: `top+=20px 60px`,
+                endTrigger: "#current-temperature",
+                end: `center 24px`,
+                scrub: true,
+                toggleActions: "restart none none reverse"
+            }
+        });
+        console.log(test);
+        test.to("#heigh-low-temp", { opacity: 0 }).to("#current-temperature", { opacity: 0, }).to("#sub-text", { opacity: 1 });;
+
     });
 
-    const subTextAnimation = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#current-weather",
-            start: "60px 0%",
-            end: "140px 0%",
-            scrub: true,
-            toggleActions: "restart none none reverse"
-        }
-    });
-    currentWeatherAnimation.from("#current-temperature", { opacity: 1, duration: 1 });
-    currentWeatherAnimation.to("#current-temperature", { opacity: 0, duration: 1 });
-    heighLowTempAnimation.from("#heigh-low-temp", { opacity: 1, duration: 1 });
-    heighLowTempAnimation.to("#heigh-low-temp", { opacity: 0, duration: 1 });
-    subTextAnimation.from("#sub-text", { opacity: 0, duration: 1 });
-    subTextAnimation.to("#sub-text", { opacity: 1, duration: 1 });
 });
 
 </script>
 
 <template>
     <div id="current-weather" class="text-white text-center">
-        <div id="location-name" class="text-3xl font-medium mb-1 relative">
+        <div id="location-name" class="text-3xl font-medium mb-1 mt-12 relative">
             {{ locationName }}
-            <div id="sub-text" class="absolute left-1/2 -translate-x-1/2">
+            <div id="sub-text" class="absolute left-1/2 -translate-x-1/2 opacity-0">
                 {{ currentTemperature }}° | {{ weatherCodeToText }}
             </div>
         </div>

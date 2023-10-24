@@ -12,14 +12,24 @@
 
   --bg-hsl: 0, 0%;
   --bg-rgba: 0, 0, 0;
-  --bg: hsl(var(--bg-hsl), 10%);
-  --card-bg: hsl(var(--bg-hsl), 15%);
+  --bg: rgb(14 165 233);
+  --card-bg: rgb(8, 139, 200);
   --sky: rgb(14 165 233);
   --bg-gradient: linear-gradient(rgb(14 165 233) 90%, rgb(94, 196, 244));
   --surface: hsl(0 0% 92%);
   --surface-2: hsl(0 0% 84%);
   --text: hsl(0 0% 0%);
   --border: hsl(0 0% 0%);
+
+  --current-weather-animation-offset: 120px;
+  --heighLowTempAnimation-start: -20px;
+  --heighLowTempAnimation-end: 40px;
+
+  --currentWeatherAnimation-start: 20px;
+  --currentWeatherAnimation-end: 70px;
+
+  --subTextAnimation-start: 60px;
+  --subTextAnimation-end: 140px;
 }
 * {
   @apply text-base
@@ -28,12 +38,40 @@
   display: none; 
 }
 html {
-
-  background: var(--bg); 
    @apply antialiased bg-fixed bg-no-repeat bg-center overflow-x-hidden;
+}
+@media (display-mode: standalone) {
+  :root {
+    --offset: 10rem;
+    --current-weather-animation-offset: 50px;
+  --heighLowTempAnimation-start: -60px;
+  --heighLowTempAnimation-end: 5px;
+
+  --currentWeatherAnimation-start: -20px;
+  --currentWeatherAnimation-end: 50px;
+
+  --subTextAnimation-start: 50px;
+  --subTextAnimation-end: 100px;
+
+  }
+  header {
+    top: 0px;
+    padding-top: 10px
+  }
+}
+@media (display-mode: browser) {
+  header {
+    top: 24px;
+  }
 }
 body {
   padding-bottom: -20px
+}
+header{
+  
+  position: sticky;
+  text-align: center;
+  z-index: 1;
 }
 main {
   display: grid;
@@ -50,17 +88,21 @@ main::before {
   content: "";
   position: fixed;
   top: 0;
+  left:0;
+  right: 0;
   height: calc(var(--offset) * 1);
   z-index: 1;
   grid-column: 1 / -1;
   display: block;
-  width: 100%;
+  
   background: linear-gradient(var(--bg), var(--bg)); 
 }
-header{
-  position: relative;
-  text-align: center;
-  z-index: 1;
+
+img.condition-icon {
+  max-width: 30px;
+}
+.location {
+  background: var(--bg);
 }
 .card {
   background: var(--card-bg);
@@ -68,7 +110,7 @@ header{
 .card::before {
   content: "";
   position: sticky;
-  top:  calc(var(--offset) * 1);
+  top: var(--offset);
   height: calc(var(--vp-gutter) * 1.5);
   z-index: 0;
   grid-column: 1 / -1;
@@ -79,11 +121,11 @@ header{
 
 .card-header {
   position: sticky;
-  top:  calc(var(--offset) * 1);
+  top: var(--offset);
   z-index: 1;
   font-size: 1rem;
   font-variant-caps: all-small-caps;
-  padding-block: 0.5rem 0.7rem;
+  padding-block: 0.4rem 0.4rem;
   margin-top: -10px;
   background-color: inherit;
 }

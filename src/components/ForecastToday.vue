@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, computed } from 'vue';
-import ForecastHour from './forecastToday/ForecastHour.vue';
-import Card from './Card.vue';
+import ForecastHour from '@c/forecastToday/ForecastHour.vue';
+import Card from '@c/Card.vue';
 const props = defineProps({
     hourly: {
         type: Array,
@@ -21,7 +21,7 @@ const sunsetTimes = computed(() => {
 });
 
 const sunriseSunsetTimes = computed(() => {
-
+    return { sunset: props.today.values.sunsetTime, sunrise: props.today.values.sunriseTime };
 });
 const untilNextDay = computed(() => {
     const hourlyArr = props.hourly;
@@ -60,6 +60,7 @@ const untilNextDay = computed(() => {
 
         }
     ];
+
     const arr = [...hourlyArr, ...sunsetSunriseTimes];
 
     let returnArr = arr.filter((item) => {
@@ -74,7 +75,13 @@ const untilNextDay = computed(() => {
     });
 });
 
-
+const isNight = (item) => {
+    const actualTime = new Date(item.time)
+    return actualTime > new Date(props.today.values.sunsetTime) && actualTime < new Date(props.nextDay.values.sunriseTime);
+};
+const weatherContext = (item) => {
+    return item.isSunrise ? 'sunrise' : item.isSunset ? 'sunset' : 'condition';
+};
 const headerText = "Sunny conditions will countinue for the rest of the day. Wind gusts are up to 36 km/h."
 </script>
 
@@ -85,7 +92,8 @@ const headerText = "Sunny conditions will countinue for the rest of the day. Win
         </template>
         <template #card-body>
             <div class="w-full overflow-x-scroll overflow-y-hidden flex gap-6 py-2 px-4 snap-x snap-mandatory">
-                <forecast-hour v-for="item in untilNextDay" :hour-weather-data="item" />
+                <forecast-hour v-for="item in untilNextDay" :hour-weather-data="item" :is-night="isNight(item)"
+                    :context="weatherContext(item)" />
             </div>
         </template>
     </Card>
