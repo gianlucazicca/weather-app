@@ -30,6 +30,8 @@
 
   --subTextAnimation-start: 60px;
   --subTextAnimation-end: 140px;
+  --ani-start: 200px;
+  --ani-end: 240px;
 }
 * {
   @apply text-base
@@ -38,66 +40,55 @@
   display: none; 
 }
 html {
+  background: var(--bg);
    @apply antialiased bg-fixed bg-no-repeat bg-center overflow-x-hidden;
 }
 @media (display-mode: standalone) {
   :root {
     --offset: 10rem;
     --current-weather-animation-offset: 50px;
-  --heighLowTempAnimation-start: -60px;
-  --heighLowTempAnimation-end: 5px;
-
-  --currentWeatherAnimation-start: -20px;
-  --currentWeatherAnimation-end: 50px;
-
-  --subTextAnimation-start: 50px;
-  --subTextAnimation-end: 100px;
+  --ani-start: 238px;
+  --ani-end: 250px;
 
   }
   header {
     top: 0px;
     padding-top: 10px
   }
+  footer{
+    padding-bottom: 3rem;
+  
+  }
 }
 @media (display-mode: browser) {
   header {
     top: 24px;
+  }
+  footer{
+    padding-bottom: 1rem;
   }
 }
 body {
   padding-bottom: -20px
 }
 header{
-  
   position: sticky;
   text-align: center;
   z-index: 1;
 }
-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-top: calc(var(--vp-gutter) * -2);
-  position: relative;
-  z-index: 0;
-}
-main > *:not(.tile) {
-  grid-column: 1 / -1;
-}
-main::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left:0;
-  right: 0;
-  height: calc(var(--offset) * 1);
-  z-index: 1;
-  grid-column: 1 / -1;
-  display: block;
-  
-  background: linear-gradient(var(--bg), var(--bg)); 
-}
 
+footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 9999;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 70, 156, 0.39);
+  backdrop-filter: blur(10px);
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 img.condition-icon {
   max-width: 30px;
 }

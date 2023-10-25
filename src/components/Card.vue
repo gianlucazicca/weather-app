@@ -4,7 +4,8 @@
 
 <template>
     <div class="card rounded-xl bg-sky-600 backdrop-blur w-full">
-        <div class="card-header text-sky-200 rounded-xl bg-sky-600 font-bold text-left px-4  text-xs leading-5">
+        <div ref="cardHeader"
+            class="card-header text-sky-200 rounded-xl bg-sky-600 font-bold text-left px-4  text-xs leading-5">
             <slot name="card-header"></slot>
         </div>
         <div class="px-4">
@@ -16,3 +17,9 @@
 
     </div>
 </template>
+
+<style>
+.card-header.is-pinned {
+    color: red;
+}
+</style>

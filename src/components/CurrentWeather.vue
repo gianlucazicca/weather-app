@@ -41,30 +41,46 @@ const weatherCodeToText = computed(() => {
 });
 
 onMounted(() => {
+    const style = getComputedStyle(document.body)
+    const start = style.getPropertyValue('--ani-start');
+    const end = style.getPropertyValue('--ani-end');
+
+
     gsap.registerPlugin(ScrollTrigger);
-    nextTick().then(() => {
+    setTimeout(() => {
         const test = gsap.timeline({
             scrollTrigger: {
-                trigger: "#current-weather",
-                start: `top+=20px 60px`,
-                endTrigger: "#current-temperature",
-                end: `center 24px`,
+                trigger: "#today",
+                start: `top ${start}`,
+                end: `center ${end}`,
                 scrub: true,
+                markers: true,
                 toggleActions: "restart none none reverse"
             }
         });
         console.log(test);
         test.to("#heigh-low-temp", { opacity: 0 }).to("#current-temperature", { opacity: 0, }).to("#sub-text", { opacity: 1 });;
 
+    }, 500);
+    nextTick().then(() => {
+        console.log('nextTick')
     });
 
+});
+
+onUnmounted(() => {
+    console.log('unmounted')
+    let triggers = ScrollTrigger.getAll();
+    triggers.forEach(trigger => {
+        trigger.kill();
+    });
 });
 
 </script>
 
 <template>
-    <div id="current-weather" class="text-white text-center">
-        <div id="location-name" class="text-3xl font-medium mb-1 mt-12 relative">
+    <div id="current-weather" class="text-white text-center pb-8">
+        <div id="location-name" class="text-3xl font-medium mb-1 mt-12">
             {{ locationName }}
             <div id="sub-text" class="absolute left-1/2 -translate-x-1/2 opacity-0">
                 {{ currentTemperature }}° | {{ weatherCodeToText }}
