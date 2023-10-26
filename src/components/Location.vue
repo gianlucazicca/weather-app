@@ -64,12 +64,13 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-    console.log('mount');
+    const style = getComputedStyle(document.body)
+    console.log(style.getPropertyValue('--bg'));
+    document.body.style.background = style.getPropertyValue('--bg');
     gsap.fromTo('#content', { opacity: 0 }, { opacity: 1, duration: .5 });
 })
 
 onBeforeUnmount(() => {
-    console.log('unmount');
     window.scrollTo(0, 0);
 })
 

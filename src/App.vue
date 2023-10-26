@@ -1,17 +1,13 @@
 <script setup>
-import { computed } from 'vue';
+import BaseLayout from './layouts/BaseLayout.vue';
 import Dashboard from '@/sites/Dashboard.vue';
-import BaseLayout from '@/layouts/BaseLayout.vue';
-const activeComponent = computed(() => {
-  return Dashboard;
-});
 </script>
 
 <template>
   <base-layout>
     <Suspense>
       <template #default>
-        <component :is="activeComponent" />
+        <Dashboard />
       </template>
     </Suspense>
   </base-layout>
