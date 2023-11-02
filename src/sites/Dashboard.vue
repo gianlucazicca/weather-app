@@ -1,23 +1,43 @@
 <script setup>
-import { ref } from 'vue';
 import Location from '../components/Location.vue';
 import List from '../components/List.vue';
-const items = ['Karlsruhe', 'München', 'Rom']
+import { useGlobalState } from '@/store/store';
+import { onBeforeMount, ref } from 'vue';
+import { setLastViewedLocation, getLocation } from '../store/actions';
+const state = useGlobalState();
+const viewedLocation = ref(null);
+onBeforeMount(() => {
+    console.log(state.value.lastViewedLocation, 'lastViewedLocation')
+    if (state.value.lastViewedLocation) {
+        viewedLocation.value = getLocation(state.value.lastViewedLocation);
+        openLocationView(viewedLocation.value);
+    } else {
+        console.lg('no lastViewedLocation')
+    }
+})
+const openLocationView = (data) => {
+    console.log(data, 'data')
+    setLastViewedLocation(data.key);
+    toggleList();
+}
 
-const currentItem = ref(null);
-const show = ref(false);
-const open = (i) => {
-    currentItem.value = i;
-    show.value = !show.value;
+const toggleList = () => {
+    state.value.showList = !state.value.showList;
 }
 </script>
 
 <template>
     <div>
-        <Transition>
-            <Location v-if="show" :data="currentItem" @view="open(i)" />
-        </Transition>
-        <List v-if="!show" :items="items" @open="open" @view="open(i)" />
+        <div>
+            <Transition>
+                <Location v-if="!state.showList" :data="viewedLocation" @show-list="toggleList" />
+            </Transition>
+        </div>
+        <div>
+            <Transition>
+                <List v-if="state.showList" :locations="state.locations" @view="openLocationView" />
+            </Transition>
+        </div>
     </div>
 </template>
 

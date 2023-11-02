@@ -3,14 +3,21 @@ import { onMounted, onBeforeMount, ref } from 'vue';
 import ListLocationItem from '@c/ListLocationItem.vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
+import { useLocationSearch } from '@/composables/locationSearch';
+import { useGlobalState } from '@/store/store';
+import { addLoaction } from '@/store/actions';
 const emits = defineEmits(['view']);
-const it = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const props = defineProps({
+    locations: {
+        type: Array,
+        required: true
+    },
+});
+const state = useGlobalState();
 const showSearchContainer = ref(false);
 const searchInput = ref(null);
-const searchResults = ref(null);
+const searchResults = ref([]);
 const timeout = ref(null)
-
 //set background color and animation for list
 onBeforeMount(() => {
     document.body.style.background = 'rgba(0,0,0,1)';
@@ -48,19 +55,33 @@ const closeSearchContainer = () => {
 //search
 const search = () => {
     timeout.value ? window.clearTimeout(timeout.value) : console.log(timeout.value, 'timeout');
-    timeout.value = setTimeout(() => {
-        searchResults.value = searchInput.value;
-    }, 350)
+    timeout.value = setTimeout(async () => {
+        const { data, error } = await useLocationSearch(searchInput.value);
+        console.log(data.value)
+        if (!error.value) searchResults.value = data.value;
+        else console.log(error);
+    }, 600)
 }
 
+const callAddLocation = (e) => {
+    console.log(e)
+    addLoaction(e);
 
+}
 //smoother transition from list to location
 
-const handleView = (e) => {
+const handleView = (e, data) => {
+    smoothTransition(e);
+    setTimeout(() => {
+        console.log(data)
+        emits('view', data);
+    }, 380)
+};
+
+const smoothTransition = (e) => {
     let clone;
     const el = e.target;
     const { top, left, right } = el.getBoundingClientRect();
-    console.log(top);
     clone = el.cloneNode(true);
     console.log(clone)
     clone.style.position = 'fixed';
@@ -84,18 +105,23 @@ const handleView = (e) => {
         clone.style.background = 'var(--bg)';
 
     })
-    setTimeout(() => {
-        emits('view', e.target);
-    }, 380)
-};
+}
 </script>
 
 <template>
     <div class="min-h-screen bg-black pb-8 pt-8">
         <Transition>
             <div v-if="showSearchContainer"
-                class="bg-black/80 fixed h-screen w-full top-0 z-30 pt-56 backdrop-blur-lg duration-150 transition-all">
-                {{ searchResults }}
+                class="bg-black/80 fixed h-screen w-full top-0 z-30 pt-56 backdrop-blur-lg duration-150 transition-all overflow-y-scroll">
+                <div v-if="searchResults.length > 0" v-for="location in searchResults" class="px-4">
+                    <button class="p-2 block w-full text-left" @click="callAddLocation(location)">
+                        {{ location.LocalizedName }}
+                        <span class="opacity-50">
+                            {{ location.AdministrativeArea ? location.AdministrativeArea.LocalizedName : '' }}
+                            {{ location.Country.LocalizedName }}
+                        </span>
+                    </button>
+                </div>
             </div>
         </Transition>
 
@@ -115,7 +141,15 @@ const handleView = (e) => {
             </div>
         </div>
         <div id="list-container">
-            <ListLocationItem v-for="i in it" :key="i" @click="handleView($event)" />
+            <div>
+                <ListLocationItem v-if="state.geoLocation.isAvailable" :data="state.geoLocation.coords"
+                    @click="handleView($event, { locationName: i })" />
+                <ListLocationItem v-for="location in locations" :key="location.key" :location="location"
+                    @click="handleView($event, location)" />
+            </div>
+
+
+
         </div>
     </div>
 </template>

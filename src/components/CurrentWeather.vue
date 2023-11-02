@@ -2,10 +2,7 @@
 import { defineProps, computed, onMounted, onUnmounted, ref, nextTick, onBeforeUpdate } from 'vue';
 import weatherCodes from '@/assets/weatherCodes.json'
 import { gsap } from "gsap";
-
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-
 
 const props = defineProps({
     locationName: String,
@@ -54,22 +51,15 @@ onMounted(() => {
                 start: `top ${start}`,
                 end: `center ${end}`,
                 scrub: true,
-                markers: true,
                 toggleActions: "restart none none reverse"
             }
         });
-        console.log(test);
         test.to("#heigh-low-temp", { opacity: 0 }).to("#current-temperature", { opacity: 0, }).to("#sub-text", { opacity: 1 });;
 
     }, 500);
-    nextTick().then(() => {
-        console.log('nextTick')
-    });
-
 });
 
 onUnmounted(() => {
-    console.log('unmounted')
     let triggers = ScrollTrigger.getAll();
     triggers.forEach(trigger => {
         trigger.kill();
