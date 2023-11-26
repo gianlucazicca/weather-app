@@ -6,7 +6,7 @@ const storeInitValues = {
     isAvailable: false,
     coords: {},
   },
-  lastViewedLocation: {},
+  lastViewedLocation: null,
   currentLocation: {},
   locations: [],
   showList: false,

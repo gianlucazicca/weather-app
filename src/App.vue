@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref } from 'vue';
 import BaseLayout from './layouts/BaseLayout.vue';
-import Dashboard from '@/sites/Dashboard.vue';
 import { useGlobalState } from './store/store';
 const state = useGlobalState();
 const location = ref(null);
@@ -28,10 +27,30 @@ if ("geolocation" in navigator) {
     {{ location }}
     <Suspense>
       <template #default>
-        <Dashboard />
+        <router-view v-slot="{ Component }">
+          <transition>
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </template>
     </Suspense>
   </base-layout>
 </template>
 
-<style></style>
+<style scoped>
+.v-enter-active {
+  transition: opacity 350ms ease-in-out;
+}
+
+.v-leave-active {
+  transition: opacity 250ms ease-in-out;
+}
+
+.v-enter-from {
+  opacity: 1;
+}
+
+.v-leave-to {
+  opacity: 0;
+}
+</style>

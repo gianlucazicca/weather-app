@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, onBeforeMount, ref } from 'vue';
+import { useMainStore } from '@/store/mainStore';
 import ListLocationItem from '@c/ListLocationItem.vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLocationSearch } from '@/composables/locationSearch';
-import { useGlobalState } from '@/store/store';
-import { addLoaction } from '@/store/actions';
+import { storeToRefs } from 'pinia';
 const emits = defineEmits(['view']);
 const props = defineProps({
     locations: {
@@ -13,7 +13,7 @@ const props = defineProps({
         required: true
     },
 });
-const state = useGlobalState();
+const mainStore = useMainStore();
 const showSearchContainer = ref(false);
 const searchInput = ref(null);
 const searchResults = ref([]);
@@ -43,6 +43,7 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
+    console.log(mainStore, '#########')
     gsap.to('#list-header', { opacity: 1, duration: .350, delay: .250 });
     gsap.to('#list-container', { opacity: 1, duration: .350, delay: .250 });
 })
@@ -56,16 +57,15 @@ const closeSearchContainer = () => {
 const search = () => {
     timeout.value ? window.clearTimeout(timeout.value) : console.log(timeout.value, 'timeout');
     timeout.value = setTimeout(async () => {
-        const { data, error } = await useLocationSearch(searchInput.value);
-        console.log(data.value)
-        if (!error.value) searchResults.value = data.value;
-        else console.log(error);
+        const res = await mainStore.searchLocation(searchInput.value);
+        console.log(res)
+        searchResults.value = res;
     }, 600)
 }
 
 const callAddLocation = (e) => {
-    console.log(e)
-    addLoaction(e);
+    console.log(e);
+    mainStore.test(e);
 
 }
 //smoother transition from list to location
@@ -142,7 +142,7 @@ const smoothTransition = (e) => {
         </div>
         <div id="list-container">
             <div>
-                <ListLocationItem v-if="state.geoLocation.isAvailable" :data="state.geoLocation.coords"
+                <ListLocationItem v-if="mainStore.geoLocation.isAvailable" :data="mainStore.geoLocation.coords"
                     @click="handleView($event, { locationName: i })" />
                 <ListLocationItem v-for="location in locations" :key="location.key" :location="location"
                     @click="handleView($event, location)" />

@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import { updateLocationWeather } from '@/store/actions';
-import { getLocation } from '@/store/actions';
+import { updateLocationWeather } from '@/store/oldactions';
+import { getLocation } from '@/store/oldactions';
 const apiKey = import.meta.env.VITE_CLIMA_CELL_API_KEY;
 const baseUrl = import.meta.env.VITE_CLIMA_CELL_BASE_URL;
 export async function useFetch({ nameOrCoords, type, unit, locationKey, lastFetched }) {

@@ -1,18 +1,17 @@
 <script setup>
 import Location from '../components/Location.vue';
 import List from '../components/List.vue';
-import { useGlobalState } from '@/store/store';
 import { onBeforeMount, ref } from 'vue';
-import { setLastViewedLocation, getLocation } from '../store/actions';
-const state = useGlobalState();
+import { setLastViewedLocation, getLocation } from '../store/oldactions';
+import { useMainStore } from '@/store/mainStore';
+const mainStore = useMainStore();
 const viewedLocation = ref(null);
 onBeforeMount(() => {
-    console.log(state.value.lastViewedLocation, 'lastViewedLocation')
-    if (state.value.lastViewedLocation) {
-        viewedLocation.value = getLocation(state.value.lastViewedLocation);
+    if (mainStore.lastViewedLocation !== null) {
+        viewedLocation.value = getLocation(mainStore.lastViewedLocation);
         openLocationView(viewedLocation.value);
     } else {
-        console.lg('no lastViewedLocation')
+        console.log('no lastViewedLocation')
     }
 })
 const openLocationView = (data) => {
@@ -22,7 +21,7 @@ const openLocationView = (data) => {
 }
 
 const toggleList = () => {
-    state.value.showList = !state.value.showList;
+    mainStore.showList = !mainStore.showList;
 }
 </script>
 
@@ -30,12 +29,12 @@ const toggleList = () => {
     <div>
         <div>
             <Transition>
-                <Location v-if="!state.showList" :data="viewedLocation" @show-list="toggleList" />
+                <Location v-if="false" :data="viewedLocation" @show-list="toggleList" />
             </Transition>
         </div>
         <div>
             <Transition>
-                <List v-if="state.showList" :locations="state.locations" @view="openLocationView" />
+                <List v-if="true" :locations="mainStore.locations" @view="openLocationView" />
             </Transition>
         </div>
     </div>

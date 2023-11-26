@@ -11,7 +11,7 @@ const props = defineProps({
     name: String,
     data: Object
 });
-
+console.log(props.data, 'props.data')
 const emit = defineEmits(['showList']);
 const realtime = computed(() => {
     return props.data.weather.realtime.data;
@@ -73,7 +73,7 @@ onBeforeUnmount(() => {
                 <u-v-index :uvIndexData="realtime.data" />
             </main>
             <footer>
-                <button @click="$emit('showList')">List</button>
+                <button @click="this.$router.push('/')">List</button>
             </footer>
         </div>
     </div>
